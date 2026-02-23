@@ -3,5 +3,9 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: "/click-me/", 
+  base: '/click-me/',
+  build: {
+    outDir: 'dist',
+    assetsDir: 'assets',
+  }
 })
