@@ -26,4 +26,4 @@ Please change the parent <Route path="${Y}"> to <Route path="${Y==="/"?"*":`${Y}
                   0% { transform: translateY(0) rotate(0deg); opacity: 1; }
                   100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
                 }
-            `})]})};function Q0(){return ut.jsx(D0,{children:ut.jsxs(n0,{children:[ut.jsx(Bc,{path:"/",element:ut.jsx(L0,{})}),ut.jsx(Bc,{path:"/birthday-wishes",element:ut.jsx(X0,{})})]})})}cv.createRoot(document.getElementById("root")).render(ut.jsx(M.StrictMode,{children:ut.jsx(Q0,{})}));
+            `})]})};function Q0(){return ut.jsx(D0,{basename:"/click-me",children:ut.jsxs(n0,{children:[ut.jsx(Bc,{path:"/",element:ut.jsx(L0,{})}),ut.jsx(Bc,{path:"/birthday-wishes",element:ut.jsx(X0,{})})]})})}cv.createRoot(document.getElementById("root")).render(ut.jsx(M.StrictMode,{children:ut.jsx(Q0,{})}));
