@@ -52,7 +52,7 @@ const SuccessPage = () => {
 		<div className="relative h-screen w-full bg-white overflow-hidden font-sans">
 			{/* AUDIO FIX: Added ./ to make it relative to the click-me folder */}
 			<audio ref={audioRef} loop>
-				<source src="./birthday-song.mp3" type="audio/mpeg" />
+				<source src="/click-me/birthday-song.mp3" type="audio/mpeg" />
 			</audio>
 
 			{/* MODAL */}
