@@ -28,12 +28,19 @@ const SuccessPage = () => {
 
 		const playAudio = () => {
 			if (audioRef.current) {
-				audioRef.current.play().catch(() => {});
+				// We add a slight volume just in case
+				audioRef.current.volume = 0.5;
+				audioRef.current.play().catch((err) => {
+					console.log("Autoplay prevented. Waiting for user interaction.", err);
+				});
 			}
 		};
 
-		window.addEventListener("click", playAudio);
+		// Try to play on load
 		playAudio();
+
+		// Also trigger on any click to bypass browser blocks
+		window.addEventListener("click", playAudio);
 
 		return () => {
 			clearInterval(timer);
@@ -43,8 +50,9 @@ const SuccessPage = () => {
 
 	return (
 		<div className="relative h-screen w-full bg-white overflow-hidden font-sans">
+			{/* AUDIO FIX: Added ./ to make it relative to the click-me folder */}
 			<audio ref={audioRef} loop>
-				<source src="/birthday-song.mp3" type="audio/mpeg" />
+				<source src="./birthday-song.mp3" type="audio/mpeg" />
 			</audio>
 
 			{/* MODAL */}
@@ -74,7 +82,7 @@ const SuccessPage = () => {
 
 			{/* VERTICAL SANDWICH: 25% Top Video, 50% Center, 25% Bottom Video */}
 			<div className="flex flex-col md:grid md:grid-cols-4 h-full w-full p-2 md:p-0">
-				{/* TOP VIDEO (Mobile) - Focus on Top */}
+				{/* TOP VIDEO (Mobile) */}
 				<div className="h-[25%] md:h-full p-1 md:p-4 order-1">
 					<div className="h-full w-full overflow-hidden rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
 						<video
@@ -129,7 +137,7 @@ const SuccessPage = () => {
 					</div>
 				</div>
 
-				{/* BOTTOM VIDEO (Mobile) - Focus on Top */}
+				{/* BOTTOM VIDEO (Mobile) */}
 				<div className="h-[25%] md:h-full p-1 md:p-4 order-3">
 					<div className="h-full w-full overflow-hidden rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
 						<video
