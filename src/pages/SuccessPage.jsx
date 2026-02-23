@@ -22,36 +22,47 @@ const SuccessPage = () => {
 	const audioRef = useRef(null);
 
 	useEffect(() => {
+		// Image Slideshow Timer
 		const timer = setInterval(() => {
 			setCurrentIndex((prev) => (prev + 1) % images.length);
 		}, 3000);
 
-		const playAudio = () => {
+		const attemptPlay = () => {
 			if (audioRef.current) {
-				// We add a slight volume just in case
-				audioRef.current.volume = 0.5;
-				audioRef.current.play().catch((err) => {
-					console.log("Autoplay prevented. Waiting for user interaction.", err);
-				});
+				audioRef.current
+					.play()
+					.then(() => console.log("Music started!"))
+					.catch(() => console.log("Waiting for user click to play audio..."));
 			}
 		};
 
-		// Try to play on load
-		playAudio();
+		// 1. Try playing immediately (might fail)
+		attemptPlay();
 
-		// Also trigger on any click to bypass browser blocks
-		window.addEventListener("click", playAudio);
+		// 2. Add a one-time listener to the whole window.
+		// As soon as the user clicks anywhere, the audio UNLOCKS.
+		const unlockAudio = () => {
+			attemptPlay();
+			window.removeEventListener("click", unlockAudio);
+			window.removeEventListener("touchstart", unlockAudio);
+		};
+
+		window.addEventListener("click", unlockAudio);
+		window.addEventListener("touchstart", unlockAudio);
 
 		return () => {
 			clearInterval(timer);
-			window.removeEventListener("click", playAudio);
+			window.removeEventListener("click", unlockAudio);
+			window.removeEventListener("touchstart", unlockAudio);
 		};
 	}, []);
 
 	return (
 		<div className="relative h-screen w-full bg-white overflow-hidden font-sans">
-			{/* AUDIO FIX: Added ./ to make it relative to the click-me folder */}
-			<audio ref={audioRef} loop>
+			{/* The path must be /repo-name/file.mp3
+                Ensure birthday-song.mp3 is inside your PUBLIC folder.
+            */}
+			<audio ref={audioRef} loop preload="auto">
 				<source src="/click-me/birthday-song.mp3" type="audio/mpeg" />
 			</audio>
 
@@ -80,9 +91,8 @@ const SuccessPage = () => {
 				</div>
 			)}
 
-			{/* VERTICAL SANDWICH: 25% Top Video, 50% Center, 25% Bottom Video */}
 			<div className="flex flex-col md:grid md:grid-cols-4 h-full w-full p-2 md:p-0">
-				{/* TOP VIDEO (Mobile) */}
+				{/* TOP VIDEO */}
 				<div className="h-[25%] md:h-full p-1 md:p-4 order-1">
 					<div className="h-full w-full overflow-hidden rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
 						<video
@@ -104,6 +114,9 @@ const SuccessPage = () => {
 							<h1 className="text-[5vmin] md:text-[5.5vmin] font-bold text-gray-800 italic font-serif">
 								Happy Birthday Papa! 🥳
 							</h1>
+							<p className="text-[2vmin] text-gray-400">
+								(Click anywhere if music doesn't play)
+							</p>
 						</div>
 
 						<div className="flex-1 relative bg-white overflow-hidden">
@@ -118,7 +131,7 @@ const SuccessPage = () => {
 									>
 										<img
 											src={src}
-											className="max-w-full max-h-full object-contain rounded-lg"
+											className="max-w-full max-h-full object-contain rounded-lg shadow-md"
 											alt={`Birthday ${index}`}
 										/>
 									</div>
@@ -137,7 +150,7 @@ const SuccessPage = () => {
 					</div>
 				</div>
 
-				{/* BOTTOM VIDEO (Mobile) */}
+				{/* BOTTOM VIDEO */}
 				<div className="h-[25%] md:h-full p-1 md:p-4 order-3">
 					<div className="h-full w-full overflow-hidden rounded-xl md:rounded-2xl border border-gray-100 shadow-sm">
 						<video
@@ -152,13 +165,6 @@ const SuccessPage = () => {
 					</div>
 				</div>
 			</div>
-
-			<style>{`
-                @keyframes fall {
-                  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-                  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
-                }
-            `}</style>
 		</div>
 	);
 };
