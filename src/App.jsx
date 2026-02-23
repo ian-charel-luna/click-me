@@ -4,7 +4,8 @@ import SuccessPage from "./pages/SuccessPage";
 
 function App() {
 	return (
-		<Router>
+		// The basename tells the router where the "root" of your site is
+		<Router basename="/click-me">
 			<Routes>
 				<Route path="/" element={<LandingPage />} />
 				<Route path="/birthday-wishes" element={<SuccessPage />} />
